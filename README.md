@@ -3,7 +3,7 @@
 ## Prepare
 
 - Run `./deploy.sh`
-- [Download](https://scan.coverity.com/download/cxx/linux-64) coverity tool package into `data/downloads` directory
+- [Download](https://scan.coverity.com/download/linux64) coverity tool package into `data/downloads` directory
 - Edit `deploy/env.sh`
 - Run `./update_container.sh`
 

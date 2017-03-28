@@ -11,6 +11,6 @@ else
   su - $APPUSER -c "touch /deploy/.prepare_done"
 fi
 
-su - $APPUSER -c /deploy/launch.sh
+su - $APPUSER -c "/deploy/launch.sh || bash"
 echo "Completed at $(date)"
 exit 0

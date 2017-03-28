@@ -23,5 +23,5 @@ if [ ! -d $TOOL_BIN_DIR ]; then
 fi
 
 if [ ! -d ~/opencv ]; then
-  git clone https://github.com/opencv/opencv.git ~/opencv
+  git clone ${OPENCV_GIT_URL} ~/opencv
 fi
