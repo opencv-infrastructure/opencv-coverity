@@ -19,7 +19,9 @@ popd
 rm -fr ~/opencv_build
 mkdir ~/opencv_build
 pushd ~/opencv_build
-cmake -DENABLE_PRECOMPILED_HEADERS=OFF ../opencv && /usr/bin/time cov-build --dir cov-int make -j 4 && GZIP=-9 tar czvf opencv.tgz cov-int
+cmake -DENABLE_PRECOMPILED_HEADERS=OFF -DENABLE_CCACHE=OFF ../opencv
+/usr/bin/time cov-build --dir cov-int make -j 4
+GZIP=-9 tar czvf opencv.tgz cov-int
 set +x
 if [[ -n $COVERITY_TOKEN ]]; then
   echo Upload ${DESCRIBE}...
