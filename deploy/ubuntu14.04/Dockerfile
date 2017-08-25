@@ -1,4 +1,4 @@
-# Based on opencv-slave docker file
+# Based on opencv build worker Docker file
 FROM ubuntu:14.04
 
 RUN \
