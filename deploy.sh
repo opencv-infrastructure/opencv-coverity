@@ -23,6 +23,8 @@ export TOOL_BIN_DIR=/home/build/\${TOOL_VERSION}/bin
 
 export COVERITY_TOKEN=
 export COVERITY_EMAIL=user@mail.domain
+
+#TEST_PR=123456789
 EOF
 fi
 
