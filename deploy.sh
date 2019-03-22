@@ -3,7 +3,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 DOCKER=${DOCKER:-docker} # DOCKER="sudo docker" ./deploy.sh
 
-IMAGE_VERSION=${1:-ubuntu14.04}
+IMAGE_VERSION=${1:-ubuntu16.04}
 IMAGE=${IMAGE:-opencv_coverity}:${IMAGE_VERSION}
 CONTAINER=${CONTAINER:-opencv_coverity_${IMAGE_VERSION}}
 
