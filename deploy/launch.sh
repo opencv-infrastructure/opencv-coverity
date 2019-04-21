@@ -22,9 +22,12 @@ echo ${DESCRIBE}
 [ ! -f ~/coverity.patch ] || patch -p0 < ~/coverity.patch
 popd
 rm -fr ~/opencv_build
-mkdir ~/opencv_build
+mkdir -p ~/opencv_build
 pushd ~/opencv_build
-cmake -DENABLE_PRECOMPILED_HEADERS=OFF -DENABLE_CCACHE=OFF -DCPU_BASELINE=AVX2 -DCPU_DISPATCH= ../opencv
+cmake -DCMAKE_CXX_FLAGS="-D__COVERITY__=1" -DCMAKE_CXX_FLAGS_RELEASE="-O1 -DNDEBUG" \
+  -DENABLE_PRECOMPILED_HEADERS=OFF -DENABLE_CCACHE=OFF \
+  -DCPU_BASELINE=AVX2 -DCPU_DISPATCH= \
+  ../opencv
 /usr/bin/time cov-build --dir cov-int make -j 4
 GZIP=-9 tar czvf opencv.tgz cov-int
 set +x
@@ -34,9 +37,14 @@ if [[ -n "$TEST_PR" ]]; then
 fi
 if [[ -n $COVERITY_TOKEN ]]; then
   echo Upload ${DESCRIBE}...
-  /usr/bin/time curl --form file=@opencv.tgz --form token=$COVERITY_TOKEN --form email=$COVERITY_EMAIL \
-    --form version="master" --form description="${DESCRIBE}" \
-    https://scan.coverity.com/builds?project=OpenCV && echo "Upload: OK" || echo "Upload failed"
+  coverity_upload_build()
+  {
+    set -e
+    /usr/bin/time curl -k --form file=@opencv.tgz --form token=$COVERITY_TOKEN --form email=$COVERITY_EMAIL \
+      --form version="master" --form description="${DESCRIBE}" \
+      https://scan.coverity.com/builds?project=OpenCV
+  }
+  coverity_upload_build && echo "Upload: OK" || bash
 else
   echo Completed ${DESCRIBE}...
   echo "Coverity token is not specified. Upload build yourself (https://scan.coverity.com/projects/opencv/builds/new)"
