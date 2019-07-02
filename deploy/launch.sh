@@ -24,11 +24,15 @@ popd
 rm -fr ~/opencv_build
 mkdir -p ~/opencv_build
 pushd ~/opencv_build
-cmake -DCMAKE_CXX_FLAGS="-D__COVERITY__=1" -DCMAKE_CXX_FLAGS_RELEASE="-O1 -DNDEBUG" \
+CMAKE_GENERATOR=""
+if ninja --version >/dev/null 2>/dev/null; then
+  CMAKE_GENERATOR="-GNinja"
+fi
+cmake ${CMAKE_GENERATOR} -DCMAKE_CXX_FLAGS="-D__COVERITY__=1" -DCMAKE_CXX_FLAGS_RELEASE="-O1 -DNDEBUG" \
   -DENABLE_PRECOMPILED_HEADERS=OFF -DENABLE_CCACHE=OFF \
   -DCPU_BASELINE=AVX2 -DCPU_DISPATCH= \
   ../opencv
-/usr/bin/time cov-build --dir cov-int make -j 4
+/usr/bin/time cov-build --dir cov-int cmake --build .
 GZIP=-9 tar czvf opencv.tgz cov-int
 set +x
 if [[ -n "$TEST_PR" ]]; then
@@ -39,12 +43,13 @@ if [[ -n $COVERITY_TOKEN ]]; then
   echo Upload ${DESCRIBE}...
   coverity_upload_build()
   {
-    set -e
+    #set -e
     /usr/bin/time curl -k --form file=@opencv.tgz --form token=$COVERITY_TOKEN --form email=$COVERITY_EMAIL \
       --form version="master" --form description="${DESCRIBE}" \
       https://scan.coverity.com/builds?project=OpenCV
+    return $?
   }
-  coverity_upload_build && echo "Upload: OK" || bash
+  coverity_upload_build && echo "Upload: OK" || ( DESCRIBE=${DESCRIBE} bash )
 else
   echo Completed ${DESCRIBE}...
   echo "Coverity token is not specified. Upload build yourself (https://scan.coverity.com/projects/opencv/builds/new)"

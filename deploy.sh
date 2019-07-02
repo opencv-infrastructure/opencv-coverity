@@ -3,7 +3,7 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 DOCKER=${DOCKER:-docker} # DOCKER="sudo docker" ./deploy.sh
 
-IMAGE_VERSION=${1:-ubuntu16.04}
+IMAGE_VERSION=${1:-ubuntu18.04}
 IMAGE=${IMAGE:-opencv_coverity}:${IMAGE_VERSION}
 CONTAINER=${CONTAINER:-opencv_coverity_${IMAGE_VERSION}}
 
@@ -16,7 +16,7 @@ export APP_USERDIR=/home/build
 export APP_UID=$UID
 export APP_GID=$GROUPS
 export OPENCV_GIT_URL=https://github.com/opencv/opencv.git
-export TOOL_VERSION=cov-analysis-linux64-2017.07
+export TOOL_VERSION=cov-analysis-linux64-2019.03
 export TOOL_ARCHIVE=/home/build/downloads/\${TOOL_VERSION}.tar.gz
 export TOOL_UNPACK_DST=/home/build
 export TOOL_BIN_DIR=/home/build/\${TOOL_VERSION}/bin
