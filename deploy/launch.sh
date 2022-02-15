@@ -14,8 +14,8 @@ if [[ -n "$TEST_PR" ]]; then
   git fetch -t origin +pull/${TEST_PR}/head
   git checkout -B test FETCH_HEAD
 else
-  git checkout --detach origin/master
-  git checkout -B master origin/master
+  git checkout --detach origin/4.x
+  git checkout -B 4.x origin/4.x
 fi
 DESCRIBE=`git describe`
 echo ${DESCRIBE}
@@ -24,6 +24,8 @@ popd
 rm -fr ~/opencv_build
 mkdir -p ~/opencv_build
 pushd ~/opencv_build
+(
+unset COVERITY_TOKEN
 CMAKE_GENERATOR=""
 if ninja --version >/dev/null 2>/dev/null; then
   CMAKE_GENERATOR="-GNinja"
@@ -34,6 +36,7 @@ cmake ${CMAKE_GENERATOR} -DCMAKE_CXX_FLAGS="-D__COVERITY__=1" -DCMAKE_CXX_FLAGS_
   ../opencv
 /usr/bin/time cov-build --dir cov-int cmake --build .
 GZIP=-9 tar czvf opencv.tgz cov-int
+)
 set +x
 if [[ -n "$TEST_PR" ]]; then
   echo "PR test mode, skip results upload"
