@@ -16,10 +16,11 @@ export APP_USERDIR=/home/build
 export APP_UID=$UID
 export APP_GID=$GROUPS
 export OPENCV_GIT_URL=https://github.com/opencv/opencv.git
-export TOOL_VERSION=cov-analysis-linux64-2020.09
+export TOOL_VERSION=cov-analysis-linux64-2021.12
+export TOOL_DIR_NAME=\${TOOL_VERSION}.1
 export TOOL_ARCHIVE=/home/build/downloads/\${TOOL_VERSION}.tar.gz
 export TOOL_UNPACK_DST=/home/build
-export TOOL_BIN_DIR=/home/build/\${TOOL_VERSION}/bin
+export TOOL_BIN_DIR=/home/build/\${TOOL_DIR_NAME}/bin
 
 export COVERITY_TOKEN=
 export COVERITY_EMAIL=user@mail.domain
